@@ -1,22 +1,38 @@
-app = "n8n-fly-thang"
+app = "n8n-on-fly-7hvoqq"
 primary_region = "sin"
 
 [build]
-  dockerfile = "Dockerfile"
+  image = "n8nio/n8n"
 
 [env]
-  N8N_HOST = "n8n-fly-thang.fly.dev"
-  WEBHOOK_URL = "https://n8n-fly-thang.fly.dev"
+  # Cấu hình cần thiết cho n8n
   N8N_BASIC_AUTH_ACTIVE = "true"
   N8N_BASIC_AUTH_USER = "admin"
-  N8N_BASIC_AUTH_PASSWORD = "123456"
-
-[http_service]
-  internal_port = 5678
-  force_https = true
-  auto_start_machines = true
-  min_machines_running = 1
+  N8N_BASIC_AUTH_PASSWORD = "yourpassword" # Bạn có thể thay bằng mật khẩu mạnh hơn
+  WEBHOOK_URL = "https://n8n-on-fly-7hvoqq.fly.dev"
+  N8N_HOST = "n8n-on-fly-7hvoqq.fly.dev"
+  N8N_PORT = "5678"
+  DB_TYPE = "sqlite"
 
 [mounts]
   source = "n8n_data"
   destination = "/home/node/.n8n"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 5678
+  processes = ["app"]
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    interval = "10s"
+    timeout = "2s"
+    grace_period = "5s"
+    restart_limit = 0
