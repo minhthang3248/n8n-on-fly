@@ -5,12 +5,11 @@ primary_region = "sin"
   image = "n8nio/n8n"
 
 [env]
-  # Cấu hình cần thiết cho n8n
   N8N_BASIC_AUTH_ACTIVE = "true"
   N8N_BASIC_AUTH_USER = "admin"
-  N8N_BASIC_AUTH_PASSWORD = "yourpassword" # Bạn có thể thay bằng mật khẩu mạnh hơn
+  N8N_BASIC_AUTH_PASSWORD = "yourpassword"
   WEBHOOK_URL = "https://n8n-on-fly-7hvoqq.fly.dev"
-  N8N_HOST = "n8n-on-fly-7hvoqq.fly.dev"
+  N8N_HOST = "0.0.0.0"
   N8N_PORT = "5678"
   DB_TYPE = "sqlite"
 
@@ -19,8 +18,8 @@ primary_region = "sin"
   destination = "/home/node/.n8n"
 
 [[services]]
-  protocol = "tcp"
   internal_port = 5678
+  protocol = "tcp"
   processes = ["app"]
 
   [[services.ports]]
@@ -30,9 +29,3 @@ primary_region = "sin"
   [[services.ports]]
     handlers = ["tls", "http"]
     port = 443
-
-  [[services.tcp_checks]]
-    interval = "10s"
-    timeout = "2s"
-    grace_period = "5s"
-    restart_limit = 0
